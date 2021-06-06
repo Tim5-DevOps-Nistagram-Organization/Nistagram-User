@@ -30,6 +30,7 @@ is_finished() {
 while ! is_finished nistagram-user-microservice; do sleep 20; done
 # provera Quality Gate-a i da li je neki od testova pao
 servers_logs=$(docker logs nistagram-user --tail 20)
+echo "$servers_logs"
 python ./sonar-maven-breaker.py --testLogs "${servers_logs}" --projectKey ${SONAR_PROJ_KEY_SVC}  --pullRequestNumber ${pullKey} --branch ${branch}
 
 

@@ -8,7 +8,7 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-    pr_pipeline_job:
+    pull_request_pipeline_job:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v2
