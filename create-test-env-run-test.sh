@@ -8,7 +8,7 @@ base=${4:-main}
 source ./docker-config/.env.test
 
 if [ "$pullKey" = "0" ]; then
-  SONAR_TOKEN=${token} BRANCH_NAME=${branch} COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f ./docker-compose.test.yml  --env-file ./docker-config/.env.test up --build 
+  SONAR_TOKEN=${token} BRANCH_NAME=${branch} COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f ./docker-compose.test.yml  --env-file ./docker-config/.env.test up --build -d
 else
   SONAR_TOKEN=${token} PULL_KEY=${pullKey} PULL_REQUEST_BRANCH=${branch} BASE=${base} COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f ./docker-compose.test.yml  --env-file ./docker-config/.env.test up --build -d
 fi
@@ -30,7 +30,6 @@ is_finished() {
 while ! is_finished nistagram-user-microservice; do sleep 20; done
 # provera Quality Gate-a i da li je neki od testova pao
 servers_logs=$(docker logs nistagram-user --tail 20)
-echo "$servers_logs"
 python ./sonar-maven-breaker.py --testLogs "${servers_logs}" --projectKey ${SONAR_PROJ_KEY_SVC}  --pullRequestNumber ${pullKey} --branch ${branch}
 
 
