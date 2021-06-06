@@ -10,7 +10,9 @@ class NistagramUserApplicationTests {
 
 	@Test
 	void contextLoads() {
-		assertEquals(1,1);
+		int a = 1, b = 1;
+		int sum = a + b;
+		assertEquals(2,sum);
 	}
 
 }
