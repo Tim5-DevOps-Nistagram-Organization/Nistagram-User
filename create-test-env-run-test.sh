@@ -8,7 +8,7 @@ base=${4:-main}
 source ./config/.env.test
 
 if [ "$pullKey" = "0" ]; then
-  SONAR_TOKEN=${token} BRANCH_NAME=${branch} COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f ./docker-compose.test.yml  --env-file ./config/.env.test up --build -d 
+  SONAR_TOKEN=${token} BRANCH_NAME=${branch} COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f ./docker-compose.test.yml  --env-file ./config/.env.test up --build 
 else
   SONAR_TOKEN=${token} PULL_KEY=${pullKey} PULL_REQUEST_BRANCH=${branch} BASE=${base} COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f ./docker-compose.test.yml  --env-file ./config/.env.test up --build -d
 fi
