@@ -27,7 +27,6 @@ is_finished() {
     fi
 }
 
-
 while ! is_finished nistagram-user-microservice; do sleep 20; done
 # provera Quality Gate-a i da li je neki od testova pao
 servers_logs=$(docker logs nistagram-user --tail 20)
