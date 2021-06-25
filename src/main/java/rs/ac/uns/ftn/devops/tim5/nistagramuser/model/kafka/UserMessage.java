@@ -11,10 +11,4 @@ import lombok.Setter;
 public class UserMessage extends Message {
     private String username;
     private String email;
-
-    public UserMessage(String topic, String replayTopic, String action, String username, String email) {
-        super(topic, replayTopic, action);
-        this.username = username;
-        this.email = email;
-    }
 }

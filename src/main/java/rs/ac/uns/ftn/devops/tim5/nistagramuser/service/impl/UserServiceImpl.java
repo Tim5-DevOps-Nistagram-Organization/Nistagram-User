@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void create(String username, String email) {
         User user = new User(username, email);
-        User userSaved = userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
