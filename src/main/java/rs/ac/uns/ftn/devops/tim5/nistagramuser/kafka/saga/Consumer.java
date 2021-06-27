@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.devops.tim5.nistagramuser.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.kafka.Constants;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.kafka.Message;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.kafka.UserMessage;
@@ -26,7 +27,7 @@ public class Consumer {
     }
 
     @KafkaListener(topics = Constants.USER_TOPIC, groupId = Constants.GROUP)
-    public void getMessage(String msg) {
+    public void getMessage(String msg) throws ResourceNotFoundException {
         Message message = gson.fromJson(msg, Message.class);
         if (message.getReplayTopic().equals(Constants.USER_ORCHESTRATOR_TOPIC)) {
             UserMessage userMessage = gson.fromJson(msg, UserMessage.class);
