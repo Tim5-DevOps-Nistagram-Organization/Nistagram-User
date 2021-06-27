@@ -31,16 +31,18 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
             HttpServletRequest httpRequest = (HttpServletRequest) request;
             String authToken = httpRequest.getHeader("Authorization");
 
-            UserSecurity userSecurity = checkToken.check(authToken);
-            if (userSecurity.getUsername() != null) {
-                List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-                grantedAuthorities.add(new SimpleGrantedAuthority(userSecurity.getRole()));
-                UserDetails userDetails = new org.springframework.security.core.userdetails
-                        .User(userSecurity.getUsername(), "", grantedAuthorities);
+            if (authToken != null) {
+                UserSecurity userSecurity = checkToken.check(authToken);
+                if (userSecurity.getUsername() != null) {
+                    List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+                    grantedAuthorities.add(new SimpleGrantedAuthority(userSecurity.getRole()));
+                    UserDetails userDetails = new org.springframework.security.core.userdetails
+                            .User(userSecurity.getUsername(), "", grantedAuthorities);
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         }
         chain.doFilter(request, response);
