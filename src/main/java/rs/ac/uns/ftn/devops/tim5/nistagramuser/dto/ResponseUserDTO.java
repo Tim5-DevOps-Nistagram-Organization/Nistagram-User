@@ -21,4 +21,5 @@ public class ResponseUserDTO {
     private Date dateOfBirth;
     private String webSite;
     private String biography;
+    private boolean profileIsPrivate;
 }

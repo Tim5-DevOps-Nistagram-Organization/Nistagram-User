@@ -8,7 +8,9 @@ public class Constants {
     public static final String AUTH_USER_TOPIC = "auth_user_topic";
 
     public static final String USER_ORCHESTRATOR_TOPIC = "user_orchestrator_topic";
+    public static final String USER_SETTINGS_ORCHESTRATOR_TOPIC = "user_settings_orchestrator_topic";
     public static final String USER_TOPIC = "user_topic";
+    public static final String SEARCH_TOPIC = "search_topic";
 
     public static final String START_ACTION = "start_action";
     public static final String DONE_ACTION = "done_action";
