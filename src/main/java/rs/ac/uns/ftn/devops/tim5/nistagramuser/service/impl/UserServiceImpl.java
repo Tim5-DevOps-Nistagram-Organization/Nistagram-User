@@ -28,11 +28,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) throws ResourceNotFoundException {
-        return userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User"));
-    }
-
-    @Override
     public void create(String username, String email) {
         User user = new User(username, email);
         userRepository.save(user);
