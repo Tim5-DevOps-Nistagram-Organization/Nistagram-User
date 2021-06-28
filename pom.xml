@@ -147,6 +147,19 @@
             </dependencies>
         </profile>
         <profile>
+        <id>devl</id>
+        <properties>
+            <build.profile.id>devl</build.profile.id>
+            <profileActive>devl</profileActive>
+        </properties>
+        <dependencies>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+            </dependency>
+        </dependencies>
+    </profile>
+        <profile>
             <id>test</id>
             <properties>
                 <build.profile.id>test</build.profile.id>
