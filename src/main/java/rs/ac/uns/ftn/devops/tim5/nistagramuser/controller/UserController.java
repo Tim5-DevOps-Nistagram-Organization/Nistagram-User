@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.dto.RequestUserDTO;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.dto.ResponseUserDTO;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.exception.ResourceNotFoundException;
+import rs.ac.uns.ftn.devops.tim5.nistagramuser.kafka.saga.SettingsOrchestrator;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.mapper.UserMapper;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.service.UserService;
 
@@ -18,10 +19,12 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final SettingsOrchestrator settingsOrchestrator;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SettingsOrchestrator settingsOrchestrator) {
         this.userService = userService;
+        this.settingsOrchestrator = settingsOrchestrator;
     }
 
     @GetMapping
@@ -34,6 +37,16 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_REGULAR') || hasRole('ROLE_AGENT')")
     public ResponseEntity<String> updateRegular(@RequestBody RequestUserDTO userDTO, Principal principal) throws ResourceNotFoundException {
         userService.update(UserMapper.toEntity(userDTO), principal.getName());
+        return new ResponseEntity<>("Successfully update.", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/settings/{isPrivate}")
+    @PreAuthorize("hasRole('ROLE_REGULAR') || hasRole('ROLE_AGENT')")
+    public ResponseEntity<String> settings(@PathVariable boolean isPrivate, Principal principal) throws ResourceNotFoundException {
+        boolean changed = userService.settings(isPrivate, principal.getName());
+        if (changed)
+            settingsOrchestrator.startSaga(principal.getName(), isPrivate);
+
         return new ResponseEntity<>("Successfully update.", HttpStatus.OK);
     }
 

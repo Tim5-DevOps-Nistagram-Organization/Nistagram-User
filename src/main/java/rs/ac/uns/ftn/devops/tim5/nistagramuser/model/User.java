@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity(name = "user_table")
@@ -29,6 +26,7 @@ public class User {
     private Date dateOfBirth;
     private String webSite;
     private String biography;
+    @Column(columnDefinition = "boolean default false")
     private Boolean isPrivate;
 
     public User(String username, String email) {

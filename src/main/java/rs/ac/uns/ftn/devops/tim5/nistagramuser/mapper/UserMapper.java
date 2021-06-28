@@ -13,6 +13,6 @@ public class UserMapper {
 
     public static ResponseUserDTO toDTO(User user) {
         return new ResponseUserDTO(user.getUsername(), user.getEmail(), user.getName(), user.getPhone(),
-                user.getGender(), user.getDateOfBirth(), user.getWebSite(), user.getBiography());
+                user.getGender(), user.getDateOfBirth(), user.getWebSite(), user.getBiography(), user.getIsPrivate());
     }
 }
