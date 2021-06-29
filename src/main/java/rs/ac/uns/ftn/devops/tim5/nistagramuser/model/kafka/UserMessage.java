@@ -13,4 +13,5 @@ import lombok.Setter;
 public class UserMessage extends Message {
     private String username;
     private String email;
+    private String websiteUrl;
 }

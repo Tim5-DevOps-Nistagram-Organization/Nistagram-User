@@ -8,7 +8,7 @@ import javax.mail.MessagingException;
 public interface UserService {
     User findByUsername(String username) throws ResourceNotFoundException;
 
-    void create(String username, String email);
+    void create(String username, String email, String websiteUrl);
 
     void delete(String username) throws ResourceNotFoundException;
 
