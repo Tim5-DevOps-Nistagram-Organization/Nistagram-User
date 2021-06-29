@@ -36,7 +36,7 @@ public class Consumer {
             UserMessage userMessage = gson.fromJson(msg, UserMessage.class);
             if (userMessage.getAction().equals(Constants.START_ACTION)) {
                 try {
-                    userService.create(userMessage.getUsername(), userMessage.getEmail());
+                    userService.create(userMessage.getUsername(), userMessage.getEmail(), userMessage.getWebsiteUrl());
                     userMessage.setDetails(userMessage.getReplayTopic(), Constants.USER_TOPIC, Constants.DONE_ACTION);
                 } catch (Exception e) {
                     userMessage.setDetails(userMessage.getReplayTopic(), Constants.USER_TOPIC, Constants.ERROR_ACTION);
