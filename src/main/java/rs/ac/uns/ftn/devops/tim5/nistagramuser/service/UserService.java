@@ -17,4 +17,6 @@ public interface UserService {
     boolean settings(boolean isPrivate, String username) throws ResourceNotFoundException;
 
     void settingsRollback(boolean isPrivate, String username) throws ResourceNotFoundException, MessagingException;
+
+    boolean canAccess(User user, String username) throws ResourceNotFoundException;
 }

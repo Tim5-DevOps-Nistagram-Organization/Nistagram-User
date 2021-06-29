@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity(name = "user_table")
 @Getter
@@ -28,6 +29,12 @@ public class User {
     private String biography;
     @Column(columnDefinition = "boolean default false")
     private Boolean isPrivate;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<User> followers;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<User> following;
 
     public User(String username, String email) {
         this.username = username;
