@@ -7,9 +7,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.dto.RequestUserDTO;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.dto.ResponseUserDTO;
+import rs.ac.uns.ftn.devops.tim5.nistagramuser.dto.UserDetailsDTO;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.kafka.saga.SettingsOrchestrator;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.mapper.UserMapper;
+import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.User;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.service.UserService;
 
 import java.security.Principal;
@@ -48,6 +50,20 @@ public class UserController {
             settingsOrchestrator.startSaga(principal.getName(), isPrivate);
 
         return new ResponseEntity<>("Successfully update.", HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/details")
+    @PreAuthorize("hasRole('ROLE_REGULAR') || hasRole('ROLE_AGENT')")
+    public ResponseEntity<UserDetailsDTO> meDetails(Principal principal) throws ResourceNotFoundException {
+        return new ResponseEntity<>(UserMapper.toDTODetails(userService.findByUsername(principal.getName())), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/view/{username}")
+    public ResponseEntity<UserDetailsDTO> getByUsername(@PathVariable String username, Principal principal) throws ResourceNotFoundException {
+        User user = userService.findByUsername(username);
+        boolean canAccess = principal == null ? !user.getIsPrivate() : (!user.getIsPrivate() || userService.canAccess(user, principal.getName()));
+        return new ResponseEntity<>(UserMapper.toDTODetails(user, canAccess), HttpStatus.OK);
     }
 
 }

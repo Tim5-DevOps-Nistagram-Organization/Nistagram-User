@@ -70,4 +70,10 @@ public class UserServiceImpl implements UserService {
                 + "</p></div></body></html>";
         mailService.sendMail(dbUser.getEmail(), subject, message);
     }
+
+    @Override
+    public boolean canAccess(User user, String username) throws ResourceNotFoundException {
+        User me = findByUsername(username);
+        return user.getFollowers().contains(me);
+    }
 }
