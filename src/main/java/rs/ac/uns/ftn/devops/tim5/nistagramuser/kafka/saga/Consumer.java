@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import rs.ac.uns.ftn.devops.tim5.nistagramuser.exception.FollowRequestException;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.exception.ResourceNotFoundException;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.kafka.Constants;
+import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.kafka.FollowMessage;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.kafka.Message;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.kafka.SettingsMessage;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.kafka.UserMessage;
@@ -30,7 +32,7 @@ public class Consumer {
     }
 
     @KafkaListener(topics = Constants.USER_TOPIC, groupId = Constants.GROUP)
-    public void getMessage(String msg) throws ResourceNotFoundException, MessagingException {
+    public void getMessage(String msg) throws ResourceNotFoundException, MessagingException, FollowRequestException {
         Message message = gson.fromJson(msg, Message.class);
         if (message.getReplayTopic().equals(Constants.USER_ORCHESTRATOR_TOPIC)) {
             UserMessage userMessage = gson.fromJson(msg, UserMessage.class);
@@ -50,6 +52,11 @@ public class Consumer {
                 message.getAction().equals(Constants.ROLLBACK_ACTION)) {
             SettingsMessage settingsMessage = gson.fromJson(msg, SettingsMessage.class);
             userService.settingsRollback(!settingsMessage.isPrivate(), settingsMessage.getUsername());
+        } else if (message.getReplayTopic().equals(Constants.USER_FOLLOW_ORCHESTRATOR_TOPIC) &&
+                message.getAction().equals(Constants.ROLLBACK_ACTION)) {
+            FollowMessage followMessage = gson.fromJson(msg, FollowMessage.class);
+            userService.followRollback(followMessage.getUserUsername(), followMessage.getFollowingUsername(),
+                    followMessage.getFollowAction());
         }
     }
 }
