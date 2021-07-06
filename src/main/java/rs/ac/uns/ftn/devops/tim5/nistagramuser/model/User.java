@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "user_table")
@@ -45,6 +46,11 @@ public class User {
     public User(String username, String email) {
         this.username = username;
         this.email = email;
+        this.isPrivate = false;
+        this.followers = new HashSet<>();
+        this.following = new HashSet<>();
+        this.followRequest = new HashSet<>();
+        this.muted = new HashSet<>();
     }
 
     public User(String name, String phone, String gender, Date dateOfBirth, String webSite, String biography) {
@@ -54,6 +60,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
         this.webSite = webSite;
         this.biography = biography;
+        this.isPrivate = false;
     }
 
     public void update(User user) {
