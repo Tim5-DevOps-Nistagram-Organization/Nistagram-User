@@ -6,7 +6,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.constants.UserConstants;
@@ -18,7 +17,6 @@ import rs.ac.uns.ftn.devops.tim5.nistagramuser.model.User;
 import rs.ac.uns.ftn.devops.tim5.nistagramuser.service.UserService;
 
 import javax.transaction.Transactional;
-import java.net.URISyntaxException;
 import java.util.Collection;
 
 import static org.junit.Assert.*;
@@ -31,20 +29,17 @@ import static org.junit.Assert.*;
 public class UserIntegrationTest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Autowired
     private UserService userService;
 
     /*
-    *  Method test User edit profile
-    *  Method test creation of user,
-    *              findByUsername()
-    *              editProfile()
-    *
-    * */
+     *  Method test User edit profile
+     *  Method test creation of user,
+     *              findByUsername()
+     *              editProfile()
+     *
+     * */
     @Test
-    public void testEditProfile_Success() throws  ResourceNotFoundException {
+    public void testEditProfile_Success() throws ResourceNotFoundException {
 
         userService.create(UserConstants.USERNAME1, UserConstants.EMAIL, "");
 
@@ -66,14 +61,14 @@ public class UserIntegrationTest {
     }
 
     /*
-    *   Method test User privacy settings.
-    *
-    * */
+     *   Method test User privacy settings.
+     *
+     * */
     @Test
-    public void testUserPrivacySettings_Success() throws URISyntaxException, ResourceNotFoundException {
+    public void testUserPrivacySettings_Success() throws ResourceNotFoundException {
         userService.create(UserConstants.USERNAME2, UserConstants.EMAIL, "");
         boolean changed = userService.settings(UserConstants.IS_PRIVATE, UserConstants.USERNAME2);
-        assertEquals(changed, true);
+        assertTrue(changed);
         User user = userService.findByUsername(UserConstants.USERNAME2);
         assertEquals(true, user.getIsPrivate());
     }
@@ -90,9 +85,9 @@ public class UserIntegrationTest {
     }
 
     /*
-    *   Method test all following features
-    *
-    * */
+     *   Method test all following features
+     *
+     * */
     @Test
     public void testFollowFeature_Success() throws ResourceNotFoundException, FollowRequestException {
 
@@ -102,7 +97,7 @@ public class UserIntegrationTest {
 
         boolean following = userService.follow(UserConstants.USERNAME3, UserConstants.USERNAME4);
         // because profile is private
-        assertEquals(false, following);
+        assertFalse(following);
 
         // test follow request creation
         Collection<User> followRequests = userService.getFollowRequests(UserConstants.USERNAME4);
@@ -110,8 +105,8 @@ public class UserIntegrationTest {
 
         //accept follow request
         userService.followRequest(UserConstants.USERNAME4,
-                                    UserConstants.USERNAME3,
-                                    UserConstants.ACCEPT_FOLLOW_REQUEST);
+                UserConstants.USERNAME3,
+                UserConstants.ACCEPT_FOLLOW_REQUEST);
 
         // test if followedUser has new follower
         User followedUser = userService.findByUsername(UserConstants.USERNAME4);
@@ -123,11 +118,6 @@ public class UserIntegrationTest {
         assertEquals(1, followerUser.getFollowing().size());
 
     }
-
-
-
-
-
 
 
 }

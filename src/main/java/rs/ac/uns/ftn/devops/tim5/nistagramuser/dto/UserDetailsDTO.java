@@ -22,5 +22,8 @@ public class UserDetailsDTO {
     private String biography;
     private int followers;
     private int following;
-    private boolean canAccess;
+    private int followRequests;
+    private boolean isPrivate;
+    private boolean isFriend;
+    private boolean isMuted;
 }

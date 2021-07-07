@@ -69,8 +69,9 @@ public class UserController {
     @GetMapping(value = "/view/{username}")
     public ResponseEntity<UserDetailsDTO> getByUsername(@PathVariable String username, Principal principal) throws ResourceNotFoundException {
         User user = userService.findByUsername(username);
-        boolean canAccess = principal == null ? !user.getIsPrivate() : (!user.getIsPrivate() || userService.canAccess(user, principal.getName()));
-        return new ResponseEntity<>(UserMapper.toDTODetails(user, canAccess), HttpStatus.OK);
+        boolean isFriend = principal != null && userService.isFriend(user, principal.getName());
+        boolean isMuted = isFriend && userService.isMuted(user, principal.getName());
+        return new ResponseEntity<>(UserMapper.toDTODetails(user, isFriend, isMuted), HttpStatus.OK);
     }
 
     @PutMapping(value = "/follow/{username}")
