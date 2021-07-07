@@ -20,7 +20,9 @@ public interface UserService {
 
     void settingsRollback(boolean isPrivate, String username) throws ResourceNotFoundException, MessagingException;
 
-    boolean canAccess(User user, String username) throws ResourceNotFoundException;
+    boolean isFriend(User user, String username) throws ResourceNotFoundException;
+
+    boolean isMuted(User user, String username) throws ResourceNotFoundException;
 
     boolean follow(String username, String followUserUsername) throws ResourceNotFoundException, FollowRequestException;
 

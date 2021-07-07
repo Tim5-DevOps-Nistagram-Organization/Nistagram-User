@@ -76,9 +76,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean canAccess(User user, String username) throws ResourceNotFoundException {
+    public boolean isFriend(User user, String username) throws ResourceNotFoundException {
         User me = findByUsername(username);
-        return user.getFollowers().contains(me);
+        return me.getFollowing().contains(user);
+    }
+
+    @Override
+    public boolean isMuted(User user, String username) throws ResourceNotFoundException {
+        User me = findByUsername(username);
+        return me.getMuted().contains(user);
     }
 
     @Override
